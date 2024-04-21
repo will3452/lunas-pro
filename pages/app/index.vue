@@ -4,11 +4,15 @@
     })
     const user = useSupabaseSession()
 
-    const auth = useSupabaseClient().auth
+    // const auth = useSupabaseClient().auth
 
-    async function signOut() {
-        await auth.signOut()
-        navigateTo('/'); 
+    // async function signOut() {
+    //     await auth.signOut()
+    //     navigateTo('/'); 
+    // }
+    async function logout() {
+      // Redirect the user to the logout URL
+      window.location.href = '/logout';
     }
 </script>
 
@@ -17,7 +21,7 @@
         <div>
             Hello {{ user.user.email }} ! 
             <div>
-                <UButton @click.prevent="signOut">logout for now</UButton>
+                <UButton @click.prevent="logout">logout for now</UButton>
             </div>
         </div>
     </div>
