@@ -9,7 +9,7 @@
 
     // async function signOut() {
     //     await auth.signOut()
-    //     navigateTo('/'); 
+    //     navigateTo('/');  
     // }
     async function logout() {
       // Redirect the user to the logout URL
