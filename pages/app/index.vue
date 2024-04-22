@@ -17,13 +17,11 @@ async function logout() {
     window.location.href = '/logout';
 }
 onMounted(() => {
-    // Start the clock when the component is mounted
     updateClock();
     setInterval(updateClock, 1000);
 });
 
 onBeforeUnmount(() => {
-    // Stop the clock when the component is destroyed
     clearInterval(updateClock);
 });
 const updateClock = () => {
