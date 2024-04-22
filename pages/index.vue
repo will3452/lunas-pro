@@ -1,12 +1,15 @@
 <script setup lang="ts">
 definePageMeta({
     middleware: 'guest', 
+    layout:'auth'
 })
 
 import google from '~/assets/google.png'; 
 
 const supabase = useSupabaseClient()
 const email = ref('')
+
+const state = ref({}) // test 
 
 const signInWithOtp = async () => {
   const { error } = await supabase.auth.signInWithOtp({
@@ -35,7 +38,7 @@ async function signWithGoogle () {
     <UCard class="w-full md:w-1/3 m-2">
       <h1 class="text-4xl text-center text-green-700 font-serif">LunasPro</h1>
       <h2 class="text-center font-serif">Efficient Solutions, Empowered Healthcare.</h2>
-      <UForm class="mt-4">
+      <UForm class="mt-4" :state="state">
         <UFormGroup label="Email">
           <UInput v-model="email" type="email" placeholder="Enter email." >
             <template #trailing>

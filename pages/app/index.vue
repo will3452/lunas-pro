@@ -1,6 +1,7 @@
 <script setup>
     definePageMeta({
-        middleware: 'auth'
+        middleware: 'auth',
+        layout: 'default', 
     })
     const user = useSupabaseSession()
 
@@ -17,12 +18,11 @@
 </script>
 
 <template>
-    <div class="flex h-screen justify-center items-center">
-        <div>
-            Hello {{ user.user.email }} ! 
-            <div>
-                <UButton @click.prevent="logout">logout for now</UButton>
+    <UCard>
+        <template #header>
+            <div class="text-2xl font-bold">
+                Dashboard
             </div>
-        </div>
-    </div>
+        </template>
+    </UCard>
 </template>
