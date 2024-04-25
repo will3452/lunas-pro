@@ -77,10 +77,10 @@ const updateClock = () => {
 
     <div class="grid grid-flow-col auto-cols-auto gap-4 mt-5">
         <div>
-            <DashboardPatientsCard />
+            <AdminDashboardPatientsCard />
         </div>
         <div>
-            <DashboardActivityLogsCard />
+            <AdminDashboardActivityLogsCard />
         </div>
     </div>
 </template>

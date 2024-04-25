@@ -43,7 +43,8 @@ const sideBar = [
     [
         {
             label: 'Patients',
-            icon: 'i-heroicons-user-group'
+            icon: 'i-heroicons-user-group',
+            to: '/app/administrator/patients'
         },
         {
             label: 'Doctors',
