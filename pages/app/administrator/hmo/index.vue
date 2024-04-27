@@ -1,5 +1,5 @@
 <script setup>
-const supabase = useSupabaseClient()
+import { useHmos } from '@/repository/useHmos';
 
 const columns = [
     {
@@ -35,9 +35,7 @@ onBeforeMount(() => {
 
 const loadData = async () => {
     try {
-        let { data, error } = await supabase
-            .from('hmos')
-            .select()
+        let { data, error } = await useHmos().findAll()
         state.hmo = data
     } catch (error) {
         console.log("🚀 ~ loadData ~ error:", error)
@@ -83,11 +81,7 @@ const items = (row) => [
 ]
 const deleteHmo = async (id) => {
     try {
-        await supabase
-        .from('hmos')
-        .delete()
-        .eq('id',id)
-        
+        await useHmos().delete(id)
         loadData()
     } catch (error) {
         console.log("🚀 ~ deleteHmo ~ error:", error)
