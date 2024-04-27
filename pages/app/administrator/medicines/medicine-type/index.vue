@@ -125,6 +125,7 @@ const deleteMedicineType = async (id) => {
 	}
 }
 const updateData = async (dataUpdate) => {
+	state.isSubmitting = true;
 	try {
 		let { status, data, error } = await supabase
 			.from('medicine_types')
