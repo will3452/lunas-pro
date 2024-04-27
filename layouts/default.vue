@@ -70,7 +70,8 @@ const sideBar = [
         },
         {
             label: 'HMO',
-            icon: 'i-heroicons-circle-stack'
+            icon: 'i-heroicons-circle-stack',
+            to: '/app/administrator/hmo'
         },
         {
             label: 'Settings',
