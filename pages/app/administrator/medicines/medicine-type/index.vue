@@ -67,6 +67,16 @@ const loadData = async () => {
 	state.isLoading = true
 	state.medicine_types = [];
 	try {
+		let queryCount = supabase
+			.from('medicine_types')
+			.select('count', { count: 'exact' });
+			if (state.search) {
+				queryCount = queryCount
+				.or(`name.ilike.%${state.search}%,description.ilike.%${state.search}%`);
+			}
+		const { count } = await queryCount;
+		state.total = count;
+
 		let queryData = supabase
 			.from('medicine_types')
 			.select()
@@ -79,15 +89,6 @@ const loadData = async () => {
 		const { data, error } = await queryData;
 		state.medicine_types = data
 		state.isLoading = false
-		let queryCount = supabase
-			.from('medicine_types')
-			.select('count', { count: 'exact' });
-			if (state.search) {
-				queryCount = queryCount
-				.or(`name.ilike.%${state.search}%,description.ilike.%${state.search}%`);
-			}
-		const { count } = await queryCount;
-		state.total = count;
 	} catch (error) {
 		console.log(error)
 		state.isLoading = false
