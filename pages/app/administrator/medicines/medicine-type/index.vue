@@ -98,6 +98,7 @@ const updatePagination = () => {
 	loadData()
 }
 const submitData = async (data) => {
+	console.log('submit')
 	const { name, description } = data;
 	state.isSubmitting = true;
 	const { dataSuccess, error } = await supabase.from('medicine_types').insert([
@@ -134,6 +135,7 @@ const updateData = async (dataUpdate) => {
 		if (status) {
 			state.addModalStatus = false
 			state.isSubmitting = false
+			state.update = null
 			loadData()
 		}
 	} catch (error) {
