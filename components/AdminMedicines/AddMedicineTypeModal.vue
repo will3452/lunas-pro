@@ -19,10 +19,7 @@ let state = reactive({
 })
 const emit = defineEmits(['closeModal', 'submitData'])
 const submitForm = () => {
-	if(props.update){
-		emit('updateData', {...state, id: props.update.id})
-	}
-	emit('submitData', state)
+	props.update ? emit('updateData', {...state, id: props.update.id}) : emit('submitData', state)
 }
 
 const validate = (state) => {

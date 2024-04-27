@@ -1,4 +1,5 @@
 <script setup>
+import { debounce } from 'vue-debounce';
 definePageMeta({
 	middleware: 'auth',
 	layout: 'default',
@@ -61,43 +62,39 @@ const closeModal = () => {
 	state.addModalStatus = false
 	state.update = null
 }
-const rows = computed(() => {
-	const modifiedMedicineTypes = state.medicine_types.map(medicine => {
-			const date = new Date(medicine.created_at);
-			const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-			return { ...medicine, created_at: formattedDate };
-	});
-	if (!state.search) {
-		state.total = modifiedMedicineTypes.length;
-		return modifiedMedicineTypes.slice((state.page - 1) * state.pageCount, (state.page) * state.pageCount)
-  }
-	else{
-		let newSet = modifiedMedicineTypes.slice((state.page - 1) * state.pageCount, (state.page) * state.pageCount).filter((medicine) => {
-			return Object.values(medicine).some((value) => {
-				return String(value).toLowerCase().includes(state.search.toLowerCase())
-			})
-		})
-		state.total = newSet.length
-		return newSet;
-	}
-})
 const loadData = async () => {
 	const offset = (state.page - 1) * state.pageCount;
+	state.isLoading = true
+	state.medicine_types = [];
 	try {
-		let { data, error } = await supabase
+		let queryData = supabase
 			.from('medicine_types')
 			.select()
-			.order('created_at', { ascending: true });
+			.order('created_at', { ascending: false })
+			.range(offset, state.pageCount + offset - 1)
+			if (state.search) {
+				queryData = queryData
+				.or(`name.ilike.%${state.search}%,description.ilike.%${state.search}%`);
+			}
+		const { data, error } = await queryData;
 		state.medicine_types = data
 		state.isLoading = false
-		state.total = state.medicine_types.length
+		let queryCount = supabase
+			.from('medicine_types')
+			.select('count', { count: 'exact' });
+			if (state.search) {
+				queryCount = queryCount
+				.or(`name.ilike.%${state.search}%,description.ilike.%${state.search}%`);
+			}
+		const { count } = await queryCount;
+		state.total = count;
 	} catch (error) {
 		console.log(error)
 		state.isLoading = false
 	}
 }
 const updatePagination = () => {
-	console.log(state.page);
+	loadData()
 }
 const submitData = async (data) => {
 	const { name, description } = data;
@@ -128,17 +125,26 @@ const deleteMedicineType = async (id) => {
 }
 const updateData = async (dataUpdate) => {
 	try {
+		console.log('update')
 		let { status, data, error } = await supabase
 			.from('medicine_types')
 			.update({ name: dataUpdate.name, description: dataUpdate.description })
 			.eq('id', dataUpdate.id)
 		if (status) {
-			console.log('success')
+			state.addModalStatus = false
+			tate.isSubmitting = false
 			loadData()
 		}
 	} catch (error) {
 		console.log(error);
 	}
+}
+const searchLogic = () => {
+	loadData();
+};
+const debouncedSearchLogic = debounce(searchLogic, 1000);
+const searchEvent = () => {
+	debouncedSearchLogic();
 }
 onBeforeMount(() => {
 	loadData();
@@ -146,11 +152,9 @@ onBeforeMount(() => {
 </script>
 
 <template>
-	<UBreadcrumb
-		divider="/"
+	<UBreadcrumb divider="/"
 		:links="[{ label: 'Medicine', to: '/app/administrator/medicines/' }, { label: 'Medicine Type', to: '/app/administrator/medicines/medicine-type' },]"
-		class="mb-4"
-	/>
+		class="mb-4" />
 	<UCard>
 		<template #header>
 			<div>
@@ -163,9 +167,9 @@ onBeforeMount(() => {
 			</div>
 		</template>
 		<div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-			<UInput v-model="state.search" placeholder="Search..." />
+			<UInput v-model="state.search" @input="searchEvent" placeholder="Search..." />
 		</div>
-		<UTable :columns="columns" :rows="rows" :loading="state.isLoading">
+		<UTable :columns="columns" :rows="state.medicine_types" :loading="state.isLoading">
 			<template #actions-data="{ row }">
 				<UDropdown :items="items(row)">
 					<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
