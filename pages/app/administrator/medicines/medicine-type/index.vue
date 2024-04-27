@@ -143,6 +143,8 @@ const searchLogic = () => {
 };
 const debouncedSearchLogic = debounce(searchLogic, 1000);
 const searchEvent = () => {
+	state.page = 1;
+	state.pageCount = 7;
 	debouncedSearchLogic();
 }
 onBeforeMount(() => {
