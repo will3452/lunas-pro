@@ -115,9 +115,10 @@ export const usePatients = () => {
          * @returns 
          */
         async softDelete(id: number) {
-            let body: { status?: boolean; deleted_at?: Date } = {};
+            let body: { status?: boolean; deleted_at?: Date, modified_at?: Date } = {};
             body.status = false;
             body.deleted_at = new Date();
+            body.modified_at = new Date();
             return await supabase
             .from(supaBaseTable)
             .update(body)
