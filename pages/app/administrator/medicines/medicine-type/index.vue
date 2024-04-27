@@ -125,14 +125,13 @@ const deleteMedicineType = async (id) => {
 }
 const updateData = async (dataUpdate) => {
 	try {
-		console.log('update')
 		let { status, data, error } = await supabase
 			.from('medicine_types')
-			.update({ name: dataUpdate.name, description: dataUpdate.description })
+			.update({ name: dataUpdate.name, description: dataUpdate.description, updated_at: new Date() })
 			.eq('id', dataUpdate.id)
 		if (status) {
 			state.addModalStatus = false
-			tate.isSubmitting = false
+			state.isSubmitting = false
 			loadData()
 		}
 	} catch (error) {
