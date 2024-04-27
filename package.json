@@ -12,8 +12,10 @@
   "dependencies": {
     "@nuxt/ui": "^2.15.2",
     "@nuxtjs/supabase": "^1.2.1",
+    "date-fns": "^2.30.0",
     "nuxt": "^3.11.2",
     "uuid": "^9.0.1",
+    "v-calendar": "^3.1.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   }

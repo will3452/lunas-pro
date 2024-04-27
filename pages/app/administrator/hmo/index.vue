@@ -1,5 +1,4 @@
 <script setup>
-import { useHmos } from '@/repository/useHmos';
 
 const columns = [
     {
@@ -105,6 +104,12 @@ const deleteHmo = async (id) => {
             <UInput v-model="searhName" placeholder="Filter HMO..." />
         </div>
         <UTable :rows="filteredRows" :columns="columns" >
+            <template #created_at-data="{row}">
+                {{ useDateUtils().formatDate(row.created_at,'datetime')}}
+            </template>
+            <template #modified_at-data="{row}">
+                {{ useDateUtils().formatDate(row.modified_at,'datetime')}}
+            </template>
             <template #actions-data="{ row }">
                 <UDropdown :items="items(row)">
                     <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />

@@ -1,5 +1,4 @@
 <script setup>
-import { useHmos } from '@/repository/useHmos';
 
 let props = defineProps(['visible', 'record']);
 const $emit = defineEmits(['close', 'reload','saved']);

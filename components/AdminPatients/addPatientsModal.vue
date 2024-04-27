@@ -1,17 +1,38 @@
 <script setup>
+import { format } from 'date-fns'
+const date = ref(new Date())
+
 let props = defineProps(['visible', 'record']);
 const $emit = defineEmits(['close', 'reload']);
 
-watch(() => props.record , (value) => { 
+watch(() => props.visible , (value) => { 
     if(value) {
-        data.form = props.record;
+        state.form = props.record;
     }
 })
 
-const data = reactive({
+const state = reactive({
     form:{}
 })
-const email = ref('')
+
+const onSubmit = () => {
+    try {
+        let payload = state.form
+        if(payload.id) usePatients().update(payload.id,payload)
+        else usePatients().create(payload)
+        $emit('reload')
+    } catch (error) {
+        console.log("🚀 ~ onSubmit ~ error:", error)
+    }
+
+}
+
+const validate = (state) => {
+  const errors = []
+//   if (!state.name) errors.push({ path: 'name', message: 'Required' })
+  return errors
+}
+
 </script>
 <template>
     <div>
@@ -22,16 +43,64 @@ const email = ref('')
                 <template #header>
                 <div class="flex items-center justify-between w-full">
                     <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                    Add Patient
+                    {{ state.form.view ? 'View' : state.form.id ? 'Edit' : 'Add' }} Patient
                     </h3>
                     <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" 
-                    @click="$emit('close')" />
+                    @click="$emit('close'),state.form={}" />
                 </div>
                 </template>
-                Need to adjust Width for design of Modal
-                <UFormGroup v-slot="{ error }" label="Email" :error="!email && 'You must enter an email'" help="This is a nice email!">
-                    <UInput v-model="email" type="email" placeholder="Enter email" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
-                </UFormGroup>
+                <UForm :validate="validate" :state="state.form" class="space-y-4" @submit="onSubmit">
+                    <UFormGroup label="Email" name="email"   >
+                        <UInput :disabled='state.form.view' v-model="state.form.email" placeholder="Email Address" />
+                    </UFormGroup>
+                    <UFormGroup label="First Name" name="firstName"   >
+                        <UInput :disabled='state.form.view' v-model="state.form.firstName" placeholder="First Name" />
+                    </UFormGroup>
+                    <UFormGroup label="Last Name" name="lastName">
+                        <UInput :disabled='state.form.view' v-model="state.form.lastName" placeholder="Last Name" />
+                    </UFormGroup>
+                    <UFormGroup label="Middle Name" name="middleName" >
+                        <UInput :disabled='state.form.view' v-model="state.form.middleName" placeholder="Middle Name" />
+                    </UFormGroup>
+                    <UFormGroup label="Birth Day" name="birthDate" >
+                        <UPopover :popper="{ placement: 'bottom-start' }">
+                            <UButton block icon="i-heroicons-calendar-days-20-solid" :label="format(!isNaN(state.form.birthDate) ? state.form.birthDate : date, 'd MMM, yyy')" />
+
+                            <template #panel="{ close }">
+                                <CommonDatePicker  :disabled='state.form.view' v-model="state.form.birthDate"  @close="close" />
+                            </template>
+                        </UPopover>
+                    </UFormGroup>
+                    <UFormGroup label="Gender" name="gender">
+                        <USelect
+                            :disabled='state.form.view' v-model="state.form.gender"
+                            placeholder="Select Gender"
+                            :options="['Male', 'Female']"
+                        />
+                    </UFormGroup>
+                    <UFormGroup label="Contact #." name="contactNumber">
+                        <UInput :disabled='state.form.view' v-model="state.form.contactNumber" placeholder="Contact #." />
+                    </UFormGroup>
+                    <UFormGroup label="Blood Type" name="bloodType">
+                        <UInput :disabled='state.form.view' v-model="state.form.bloodType" placeholder="Blood Type" />
+                    </UFormGroup>
+                    <UFormGroup label="Nationality" name="nationality">
+                        <UInput :disabled='state.form.view' v-model="state.form.nationality" placeholder="Nationality" />
+                    </UFormGroup>
+                    <UFormGroup label="Weight" name="weight">
+                        <UInput :disabled='state.form.view' v-model="state.form.weight"  placeholder="Weight"/>
+                    </UFormGroup>
+                    <UFormGroup label="Height" name="height">
+                        <UInput :disabled='state.form.view' v-model="state.form.height" placeholder="Height" />
+                    </UFormGroup>
+                    <UFormGroup label="Address" name="address">
+                        <UInput :disabled='state.form.view' v-model="state.form.address" placeholder="Complete Address" />
+                    </UFormGroup>
+
+                    <UButton  block type="submit">
+                    Save
+                    </UButton>
+                </UForm>
             </UCard>
         </UModal>
     </div>
