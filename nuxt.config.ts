@@ -7,7 +7,12 @@ export default defineNuxtConfig({
       login: '/',
       callback: '/confirm',
       include: undefined,
-      exclude: [],
+      exclude: [
+        '/app/administrator/patients',
+        '/app/administrator/doctors',
+        '/app/administrator/medicine-type',
+        '/app/administrator/medicine-list'
+      ],
       cookieRedirect: false,
     }, 
   }

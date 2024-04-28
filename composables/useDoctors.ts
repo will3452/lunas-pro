@@ -1,9 +1,9 @@
-export const useHmos = () => {
+export const useDoctors = () => {
 
     const supabase = useSupabaseClient()
     const user = useSupabaseUser()
 
-    const supaBaseTable = 'hmos'
+    const supaBaseTable = 'doctors'
 
     return {
         /**

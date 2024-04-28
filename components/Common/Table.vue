@@ -13,6 +13,7 @@ let state = reactive({
 const tables = {
     "patients":usePatients(),
     "hmos":useHmos(),
+    "doctors": useDoctors(),
 }
 
 const items = (row) => [
@@ -101,7 +102,7 @@ watch(() => props.reload, (value) => {
 
 <template>
     <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-        <UInput v-model="searchData" placeholder="Filter Patients..." />
+        <UInput v-model="searchData" placeholder="Filter Records..." />
     </div>
     <UTable :rows="filteredRows" :columns="columns">
 
