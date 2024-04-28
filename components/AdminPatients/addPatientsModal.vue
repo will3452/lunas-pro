@@ -17,6 +17,7 @@ const state = reactive({
 
 const onSubmit = () => {
     try {
+        delete state.form.view
         let payload = state.form
         if(payload.id) usePatients().update(payload.id,payload)
         else usePatients().create(payload)

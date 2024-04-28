@@ -3,7 +3,8 @@
 let state = reactive({
   patientsRecord: [],
   updateRecord: {},
-  addPatientModal:false
+  addPatientModal:false,
+  refreshTable: false
 })
 
 const columnsPatients = [
@@ -54,19 +55,8 @@ const columnsPatients = [
 ]
 
 
-onBeforeMount(() => {
-  loadData();
-});
-
-
-
-const loadData = async () => {
-  try {
-    let { data, error } = await usePatients().findAll()
-    state.patientsRecord = data
-  } catch (error) {
-    console.log("🚀 ~ loadData ~ error:", error)
-  }
+const loadData =  () => {
+    state.refreshTable = true
 }
 
 const recordEdit = async (record) => {
@@ -80,11 +70,12 @@ const recordEdit = async (record) => {
 }
 
 const recordDelete = async (record) => {
-  console.log("🚀 ~ recordDelete ~ record:", record)
   try {
     await usePatients().softDelete(record.id)
   } catch (error) {
     console.log("🚀 ~ recordDelete ~ error:", error)
+  } finally {
+    state.refreshTable = true
   }
 }
 
@@ -112,10 +103,11 @@ const recordView = async (record) => {
       </div>
     </template>
     <CommonTable 
+    :reload="state.refreshTable"
+    :tableName="'patients'"
     @recordView="recordView"
     @recordEdit="recordEdit"
     @recordDelete="recordDelete"
-    :rows="state.patientsRecord" 
     :columns="columnsPatients" 
     :viewColumn="['fullName','birthDate']" />
 

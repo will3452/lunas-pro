@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/supabase", "@nuxt/ui"],
   supabase: {
     redirectOptions: {
-      login: '/',
+      login: '/app/administrator/patients',
       callback: '/confirm',
       include: undefined,
       exclude: [],

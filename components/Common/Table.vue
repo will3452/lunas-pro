@@ -1,17 +1,19 @@
 <script setup>
-let props = defineProps(['columns', 'rows','viewColumn']);
+
+let props = defineProps(['columns', 'reload','viewColumn','tableName']);
 const $emit = defineEmits(['recordView', 'recordEdit', 'recordDelete']);
-watch(() => props.rows, (value) => {
-    if (value) {
-        state.newColumns = props?.columns
-        state.newRows = props?.rows
-    }
-})
+
 
 let state = reactive({
     newColumns: [],
     newRows: [],
 })
+
+// import here your composables
+const tables = {
+    "patients":usePatients(),
+    "hmos":useHmos(),
+}
 
 const items = (row) => [
     [
@@ -42,6 +44,26 @@ const items = (row) => [
     ]
 
 ]
+onBeforeMount(() => {
+    tableUsed()
+})
+
+const tableUsed = () => {
+    try {
+        Object.keys(tables).forEach(async (key) => {
+            if (key == props.tableName ) {
+                let supaTable =  tables[key]
+                let getTable = await supaTable.findAll()
+                state.newRows = getTable?.data
+            }
+        });
+        
+    } catch (error) {
+        console.log("🚀 ~ tableUsed ~ error:", error)
+    } finally {
+        props.reload = false
+    }
+}
 
 const viewRecord = (record) => {
     $emit('recordView', record)
@@ -63,13 +85,18 @@ const filteredRows = computed(() => {
     return state.newRows
   }
 
-  return state.newRows.filter((person) => {
-    return Object.values(person).some((value) => {
+  return state.newRows.filter((rec) => {
+    return Object.values(rec).some((value) => {
       return String(value).toLowerCase().includes(searchData.value.toLowerCase())
     })
   })
 })
-
+watch(() => props.reload, (value) => {
+    if (value) {
+        if(props.reload) tableUsed()
+        state.newColumns = props?.columns
+    }
+})
 </script>
 
 <template>
