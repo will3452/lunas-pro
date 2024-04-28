@@ -33,69 +33,15 @@ let state = reactive({
 	addModalStatus: false,
 	isLoading: true,
 	isSubmitting: false,
-	page: 1,
-	pageCount: 7,
-	total: 0,
-	medicine_types: [],
 	update: null,
-	search: null
+	search: null,
+	refreshTable: false
 })
-const items = (row) => [
-	[{
-		label: 'Edit',
-		icon: 'i-heroicons-pencil-square-20-solid',
-		click: () => {
-			state.update = row;
-			state.addModalStatus = true
-		}
-	},
-	{
-		label: 'Delete',
-		icon: 'i-heroicons-trash-20-solid',
-		click: () => deleteMedicineType(row.id)
-	}
-	]
-]
 
 const OpenModal = () => state.addModalStatus = true
 const closeModal = () => {
 	state.addModalStatus = false
 	state.update = null
-}
-const loadData = async () => {
-	const offset = (state.page - 1) * state.pageCount;
-	state.isLoading = true
-	state.medicine_types = [];
-	try {
-		let queryCount = supabase
-			.from('medicine_types')
-			.select('count', { count: 'exact' });
-			if (state.search) {
-				queryCount = queryCount
-				.or(`name.ilike.%${state.search}%,description.ilike.%${state.search}%`);
-			}
-		const { count } = await queryCount;
-		state.total = count;
-
-		let queryData = supabase
-			.from('medicine_types')
-			.select()
-			.order('created_at', { ascending: false })
-			.range(offset, state.pageCount + offset - 1)
-			if (state.search) {
-				queryData = queryData
-				.or(`name.ilike.%${state.search}%,description.ilike.%${state.search}%`);
-			}
-		const { data, error } = await queryData;
-		state.medicine_types = data
-		state.isLoading = false
-	} catch (error) {
-		console.log(error)
-		state.isLoading = false
-	}
-}
-const updatePagination = () => {
-	loadData()
 }
 const submitData = async (data) => {
 	console.log('submit')
@@ -111,18 +57,7 @@ const submitData = async (data) => {
 	else {
 		state.addModalStatus = false
 		state.isSubmitting = false
-		loadData()
-	}
-}
-const deleteMedicineType = async (id) => {
-	try {
-		await supabase
-			.from('medicine_types')
-			.delete()
-			.eq('id', id)
-		loadData()
-	} catch (error) {
-		console.log(error)
+		state.refreshTable = true;
 	}
 }
 const updateData = async (dataUpdate) => {
@@ -136,24 +71,25 @@ const updateData = async (dataUpdate) => {
 			state.addModalStatus = false
 			state.isSubmitting = false
 			state.update = null
-			loadData()
 		}
 	} catch (error) {
 		console.log(error);
 	}
 }
-const searchLogic = () => {
-	loadData();
-};
-const debouncedSearchLogic = debounce(searchLogic, 1000);
-const searchEvent = () => {
-	state.page = 1;
-	state.pageCount = 7;
-	debouncedSearchLogic();
+
+
+const recordView = async (record) => {
+ console.log(record);
 }
-onBeforeMount(() => {
-	loadData();
-});
+const recordEdit = async (record) => {
+  console.log(record)
+}
+const recordDelete = async (record) => {
+	console.log(record);
+}
+const refreshTableEvent = async (status) => {
+	state.refreshTable = status;
+}
 </script>
 
 <template>
@@ -171,22 +107,16 @@ onBeforeMount(() => {
 				</span>
 			</div>
 		</template>
-		<div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-			<UInput v-model="state.search" @input="searchEvent" placeholder="Search..." />
-		</div>
-		<UTable :columns="columns" :rows="state.medicine_types" :loading="state.isLoading">
-			<template #actions-data="{ row }">
-				<UDropdown :items="items(row)">
-					<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-				</UDropdown>
-			</template>
-		</UTable>
-		<div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-			<UPagination v-model="state.page" :page-count="state.pageCount" :total="state.total" :max="5"
-				:first-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'First', color: 'gray' }"
-				:last-button="{ icon: 'i-heroicons-arrow-small-right-20-solid', trailing: true, label: 'Last', color: 'gray' }"
-				show-first show-last @click="updatePagination" />
-		</div>
+		<CommonTable 
+		:reload="state.refreshTable"
+		:tableName="'medicine_types'"
+		:paginationStatus="true"
+		@recordView="recordView"
+		@recordEdit="recordEdit"
+		@recordDelete="recordDelete"
+		@refreshTable="refreshTableEvent"
+		:columns="columns" 
+		:viewColumn="['fullName','birthDate']" />
 	</UCard>
 	<AdminMedicinesAddMedicineTypeModal :isOpen="state.addModalStatus" :isSubmitting="state.isSubmitting"
 		@closeModal="closeModal" @submitData="submitData" :update="state.update" @updateData="updateData" />
