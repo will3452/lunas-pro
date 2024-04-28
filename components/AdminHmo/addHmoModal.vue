@@ -1,5 +1,4 @@
 <script setup>
-const supabase = useSupabaseClient()
 
 let props = defineProps(['visible', 'record']);
 const $emit = defineEmits(['close', 'reload','saved']);
@@ -26,12 +25,7 @@ const validate = (state) => {
 const onSubmit = async () => {
     try {
         if(props.record?.id){
-            let {status,data, error } = await supabase
-            .from('hmos')
-            .update({ name: state.name })
-            .eq('id', props.record?.id)
-            console.log("🚀 ~ onSubmit ~ props.record:",props.record)
-            console.log("🚀 ~ onSubmit ~ status:", status)
+            let {status,data} = useHmos().update(props.record?.id,{ name: state.name })
             if(status == 204){
                 toast.add({
                     title: ` Save Successfully !`,
@@ -40,10 +34,7 @@ const onSubmit = async () => {
                 state.success = true
             }
         }else {
-            let {status,data} = await supabase
-            .from('hmos')
-            .insert({ name: state.name })
-            .select()
+            let {status,data} = useHmos().createResponse({ name: state.name })
 
             if(status == 201){
                 toast.add({

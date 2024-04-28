@@ -1,5 +1,4 @@
 <script setup>
-const supabase = useSupabaseClient()
 
 const columns = [
     {
@@ -35,9 +34,7 @@ onBeforeMount(() => {
 
 const loadData = async () => {
     try {
-        let { data, error } = await supabase
-            .from('hmos')
-            .select()
+        let { data, error } = await useHmos().findAll()
         state.hmo = data
     } catch (error) {
         console.log("🚀 ~ loadData ~ error:", error)
@@ -83,11 +80,7 @@ const items = (row) => [
 ]
 const deleteHmo = async (id) => {
     try {
-        await supabase
-        .from('hmos')
-        .delete()
-        .eq('id',id)
-        
+        await useHmos().delete(id)
         loadData()
     } catch (error) {
         console.log("🚀 ~ deleteHmo ~ error:", error)
@@ -111,6 +104,12 @@ const deleteHmo = async (id) => {
             <UInput v-model="searhName" placeholder="Filter HMO..." />
         </div>
         <UTable :rows="filteredRows" :columns="columns" >
+            <template #created_at-data="{row}">
+                {{ useDateUtils().formatDate(row.created_at,'datetime')}}
+            </template>
+            <template #modified_at-data="{row}">
+                {{ useDateUtils().formatDate(row.modified_at,'datetime')}}
+            </template>
             <template #actions-data="{ row }">
                 <UDropdown :items="items(row)">
                     <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
