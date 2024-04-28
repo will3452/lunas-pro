@@ -66,7 +66,8 @@ const sideBar = [
         },
         {
             label: 'Medicines',
-            icon: 'i-heroicons-beaker'
+            icon: 'i-heroicons-beaker',
+            to: '/app/administrator/medicines'
         },
         {
             label: 'HMO',
