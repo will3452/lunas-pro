@@ -19,8 +19,8 @@ const onSubmit = () => {
     try {
         delete state.form.view
         let payload = state.form
-        if(payload.id) usePatients().update(payload.id,payload)
-        else usePatients().create(payload)
+        if(payload.id) useDoctors().update(payload.id,payload)
+        else useDoctors().create(payload)
         $emit('reload')
     } catch (error) {
         console.log("🚀 ~ onSubmit ~ error:", error)
@@ -82,18 +82,10 @@ const validate = (state) => {
                     <UFormGroup label="Contact #." name="contactNumber">
                         <UInput :disabled='state.form.view' v-model="state.form.contactNumber" placeholder="Contact #." />
                     </UFormGroup>
-                    <UFormGroup label="Blood Type" name="bloodType">
-                        <UInput :disabled='state.form.view' v-model="state.form.bloodType" placeholder="Blood Type" />
+                    <UFormGroup label="Licence #." name="licenseNumber">
+                        <UInput :disabled='state.form.view' v-model="state.form.licenseNumber" placeholder="Licence #." />
                     </UFormGroup>
-                    <UFormGroup label="Nationality" name="nationality">
-                        <UInput :disabled='state.form.view' v-model="state.form.nationality" placeholder="Nationality" />
-                    </UFormGroup>
-                    <UFormGroup label="Weight" name="weight">
-                        <UInput :disabled='state.form.view' v-model="state.form.weight"  placeholder="Weight"/>
-                    </UFormGroup>
-                    <UFormGroup label="Height" name="height">
-                        <UInput :disabled='state.form.view' v-model="state.form.height" placeholder="Height" />
-                    </UFormGroup>
+
                     <UFormGroup label="Address" name="address">
                         <UInput :disabled='state.form.view' v-model="state.form.address" placeholder="Complete Address" />
                     </UFormGroup>

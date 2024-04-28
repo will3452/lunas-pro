@@ -48,7 +48,8 @@ const sideBar = [
         },
         {
             label: 'Doctors',
-            icon: 'i-heroicons-user-group'
+            icon: 'i-heroicons-user-group',
+            to: '/app/administrator/doctors'
         },
         {
             label: 'Prescriptions',
@@ -91,9 +92,9 @@ const navBar = [
             badge: 19
         },
         {
-            label: `${session.value.user.user_metadata.full_name}`,
+            label: `${session?.value?.user?.user_metadata.full_name}`,
             avatar: {
-                src: `${session.value.user.user_metadata.picture}`
+                src: `${session?.value?.user?.user_metadata.picture}`
             },
             badge: 0
         },

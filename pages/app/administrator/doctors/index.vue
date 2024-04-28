@@ -3,11 +3,11 @@
 let state = reactive({
   patientsRecord: [],
   updateRecord: {},
-  addPatientModal:false,
+  addDoctorModal:false,
   refreshTable: false
 })
 
-const columnsPatients = [
+const columnsDoctors = [
   {
     key: 'email',
     label: 'Email'
@@ -18,19 +18,8 @@ const columnsPatients = [
     key: 'contactNumber',
     label: 'Contact #'
   }, {
-    key: 'bloodType',
-    label: 'Blood Type'
-  }, {
-    key: 'nationality',
-    label: 'Nationality'
-  },
-  {
-    key: 'weight',
-    label: 'Weight'
-  },
-  {
-    key: 'height',
-    label: 'Height'
+    key: 'licenseNumber',
+    label: 'Licence #.'
   },
   {
     key: 'address',
@@ -43,10 +32,6 @@ const columnsPatients = [
   {
     key: 'birthDate',
     label: 'Birthday'
-  },
-  {
-    key: 'hmo',
-    label: 'HMO'
   },
   {
     key: 'actions',
@@ -63,7 +48,7 @@ const recordEdit = async (record) => {
   try {
     record.view = false
     state.updateRecord = record
-    state.addPatientModal = true
+    state.addDoctorModal = true
   } catch (error) {
     console.log("🚀 ~ recordEdit ~ error:", error)
   }
@@ -71,7 +56,7 @@ const recordEdit = async (record) => {
 
 const recordDelete = async (record) => {
   try {
-    await usePatients().softDelete(record.id)
+    await useDoctors().softDelete(record.id)
   } catch (error) {
     console.log("🚀 ~ recordDelete ~ error:", error)
   } finally {
@@ -83,7 +68,7 @@ const recordView = async (record) => {
   try {
     record.view = true
     state.updateRecord = record
-    state.addPatientModal = true
+    state.addDoctorModal = true
   } catch (error) {
     console.log("🚀 ~ recordView ~ error:", error)
   }
@@ -95,27 +80,27 @@ const recordView = async (record) => {
     <template #header>
       <div>
         <span>
-          Patients List
+          Doctor List
         </span>
         <span class="float-right">
-          <UButton @click.prevent="state.addPatientModal = true,state.updateRecord = {}">Add Patients</UButton>
+          <UButton @click.prevent="state.addDoctorModal = true,state.updateRecord = {}">Add Doctor</UButton>
         </span>
       </div>
     </template>
     <CommonTable 
     :reload="state.refreshTable"
-    :tableName="'patients'"
+    :tableName="'doctors'"
     @recordView="recordView"
     @recordEdit="recordEdit"
     @recordDelete="recordDelete"
-    :columns="columnsPatients" 
+    :columns="columnsDoctors" 
     :viewColumn="['fullName','birthDate']" />
 
 
-    <AdminPatientsAddPatientsModal 
+    <AdminDoctorsAddDoctorsModal 
     :record = "state.updateRecord"
-    :visible="state.addPatientModal" 
-    @close="state.addPatientModal = false"
-    @reload="loadData(),state.addPatientModal = false" />
+    :visible="state.addDoctorModal" 
+    @close="state.addDoctorModal = false"
+    @reload="loadData(),state.addDoctorModal = false" />
   </UCard>
 </template>
