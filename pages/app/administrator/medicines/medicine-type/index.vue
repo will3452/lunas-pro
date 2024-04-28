@@ -22,7 +22,7 @@ const columns = [{
 	key: 'created_at',
 	label: 'Created Date'
 }, {
-	key: 'updated_at',
+	key: 'modified_at',
 	label: 'Modified Date'
 }, {
 	key: 'actions',
@@ -63,14 +63,12 @@ const submitData = async (data) => {
 const updateData = async (dataUpdate) => {
 	state.isSubmitting = true;
 	try {
-		let { status, data, error } = await supabase
-			.from('medicine_types')
-			.update({ name: dataUpdate.name, description: dataUpdate.description, updated_at: new Date() })
-			.eq('id', dataUpdate.id)
-		if (status) {
+		const {status} = await useMedicineTypes().update(dataUpdate)
+		if (status == 204) {
 			state.addModalStatus = false
 			state.isSubmitting = false
 			state.update = null
+			state.refreshTable = true;
 		}
 	} catch (error) {
 		console.log(error);
@@ -82,7 +80,8 @@ const recordView = async (record) => {
  console.log(record);
 }
 const recordEdit = async (record) => {
-  console.log(record)
+	state.addModalStatus = true
+	state.update = record
 }
 const recordDelete = async (record) => {
 	console.log(record);
