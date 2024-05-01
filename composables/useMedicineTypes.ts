@@ -28,5 +28,12 @@ export const useMedicineTypes = () => {
 			const { count } = await queryCount;
 			return { data, count }
 		},
+		async update(body = {}) {
+			body.modified_at = new Date()
+            return await supabase
+            .from(supaBaseTable)
+			.update(body)
+            .eq('id', body.id)
+        },
 	}
 }
