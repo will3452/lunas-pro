@@ -16,8 +16,9 @@ let state = reactive({
 
 // import here your composables
 const tables = {
-	"patients": usePatients(),
-	"hmos": useHmos(),
+    "patients":usePatients(),
+    "hmos":useHmos(),
+    "doctors": useDoctors(),
 	"medicine_types": useMedicineTypes()
 }
 
@@ -56,13 +57,13 @@ onBeforeMount(() => {
 
 const tableUsed = () => {
 	state.isLoading = true
-	state.newRows = []
 	try {
 		Object.keys(tables).forEach(async (key) => {
 			if (key == props.tableName) {
 				let supaTable = tables[key]
 				if(props.paginationStatus){
 					let {data, count} = await supaTable.paginationData(state.page, state.pageCount, state.search)
+					console.log("🚀 ~ Object.keys ~ data:", data)
 					state.newRows = data
 					state.total = count;
 				}else{
@@ -115,14 +116,14 @@ const searchEvent = () => {
 
 <template>
 	<div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-		<UInput v-model="state.search" @input="searchEvent" placeholder="Filter Patients..." />
+		<UInput v-model="state.search" @input="searchEvent" placeholder="Filter Records..." />
 	</div>
 	<UTable :rows="state.newRows" :columns="columns" :loading="state.isLoading">
 
-		<template v-if="viewColumn.includes('fullName')" #fullName-data="{ row }">
+		<template v-if="viewColumn?.includes('fullName')" #fullName-data="{ row }">
 			{{ `${row.lastName}, ${row.firstName} ${row.middleName}` }}
 		</template>
-		<template v-if="viewColumn.includes('birthDate')" #birthDate-data="{ row }">
+		<template v-if="viewColumn?.includes('birthDate')" #birthDate-data="{ row }">
 			{{ useDateUtils().formatDate(row.birthDate, 'YYYY-MM-DD') }}
 		</template>
 		<template #created_at-data="{ row }">
