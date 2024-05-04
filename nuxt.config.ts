@@ -8,10 +8,8 @@ export default defineNuxtConfig({
       callback: '/confirm',
       include: undefined,
       exclude: [
-        '/app/administrator/patients',
-        '/app/administrator/doctors',
-        '/app/administrator/medicine-type',
-        '/app/administrator/medicine-list'
+        '/app/patient/appointments',
+        '/app/patient/',
       ],
       cookieRedirect: false,
     }, 

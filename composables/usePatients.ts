@@ -6,6 +6,35 @@ export const usePatients = () => {
     const supaBaseTable = 'patients'
 
     return {
+
+        async paginationData(page = 0, pageCount = 7, search = null) {
+			const offset = (page - 1) * pageCount;
+			let queryData = supabase
+				.from(supaBaseTable)
+				.select()
+                // .eq('status',true)
+				.order('created_at', { ascending: false })
+				.range(offset, pageCount + offset - 1)
+				if (search) {
+					queryData = queryData
+					.or(`firstName.ilike.%${search}%`);
+				}
+			const { data, error } = await queryData;
+			console.log("🚀 ~ paginationData ~ data:", data)
+			let queryCount = supabase
+				.from(supaBaseTable)
+				.select('count', { count: 'exact' })
+                // .eq('status',true);
+                
+				if (search) {
+					queryCount = queryCount
+					.or(`firstName.ilike.%${search}%`);
+				}
+			const { count } = await queryCount;
+			return { data, count }
+		},
+
+
         /**
          * method that will fetch the data
          * @returns 

@@ -12,35 +12,55 @@ const sideBar = [
         {
             label: 'Dashboard',
             icon: 'i-heroicons-chart-pie',
-            to: '/app'
+            to: '/app/patient'
         },
         {
-            label: 'My Schedules', 
-            icon: 'i-heroicons-calendar-days', 
-        },
-        {
-            label: 'Reports',
+            label: 'Appointments',
             icon: 'i-heroicons-table-cells',
-            to: `/app/reports`
-        }, {
+            to: `/app/patient/appointments`
+        },
+        // {
+        //     label: 'My Schedules', 
+        //     icon: 'i-heroicons-calendar-days', 
+        // },
+        // {
+        //     label: 'Reports',
+        //     icon: 'i-heroicons-table-cells',
+        //     to: `/app/reports`
+        // },
+        {
             label: 'Medical Records',
             icon: 'i-heroicons-folder',
             to: '/app/medical-records'
-        }, {
+        },
+        {
             label: 'Blogs',
             icon: 'i-heroicons-chat-bubble-bottom-center-text'
-        }
-    ],
-    [
+        },
         {
-            label: 'Activity Logs',
-            icon: 'i-heroicons-queue-list'
-        }, {
+            label: 'Settings',
+            icon: 'i-heroicons-cog-6-tooth'
+        },
+        {
             label: 'FAQs',
             icon: 'i-heroicons-question-mark-circle'
         },
     ],
     [
+        {
+            label: 'Dashboard',
+            icon: 'i-heroicons-chart-pie',
+            to: '/app'
+        },
+        {
+            label: 'Appointments',
+            icon: 'i-heroicons-table-cells',
+            to: `/app/patient/appointments`
+        },
+        {
+            label: 'Doctor Schedules', 
+            icon: 'i-heroicons-calendar-days', 
+        },
         {
             label: 'Patients',
             icon: 'i-heroicons-user-group',
@@ -52,6 +72,47 @@ const sideBar = [
             to: '/app/administrator/doctors'
         },
         {
+            label: 'Activity Logs',
+            icon: 'i-heroicons-queue-list'
+        },
+        {
+            label: 'Billing & Invoices',
+            icon: 'i-heroicons-currency-dollar'
+        },
+        {
+            label: 'Blogs',
+            icon: 'i-heroicons-chat-bubble-bottom-center-text'
+        },
+        {
+            label: 'Settings',
+            icon: 'i-heroicons-cog-6-tooth'
+        },
+        {
+            label: 'FAQs',
+            icon: 'i-heroicons-question-mark-circle'
+        },
+    ],
+    [
+        {
+            label: 'Dashboard',
+            icon: 'i-heroicons-chart-pie',
+            to: '/app'
+        },
+        {
+            label: 'My Schedules', 
+            icon: 'i-heroicons-calendar-days', 
+        },
+        {
+            label: 'Patients',
+            icon: 'i-heroicons-user-group',
+            to: '/app/administrator/patients'
+        },
+        {
+            label: 'Appointments',
+            icon: 'i-heroicons-table-cells',
+            to: `/app/patient/appointments`
+        },
+        {
             label: 'Prescriptions',
             icon: 'i-heroicons-document-text'
         },
@@ -59,27 +120,35 @@ const sideBar = [
             label: 'Billing & Invoices',
             icon: 'i-heroicons-currency-dollar'
         },
-    ], 
-    [
         {
-            label: 'Users',
-            icon: 'i-heroicons-user-group'
-        },
-        {
-            label: 'Medicines',
-            icon: 'i-heroicons-beaker',
-            to: '/app/administrator/medicines'
-        },
-        {
-            label: 'HMO',
-            icon: 'i-heroicons-circle-stack',
-            to: '/app/administrator/hmo'
+            label: 'Blogs',
+            icon: 'i-heroicons-chat-bubble-bottom-center-text'
         },
         {
             label: 'Settings',
             icon: 'i-heroicons-cog-6-tooth'
         }
-    ]
+    ], 
+    // [
+    //     // {
+    //     //     label: 'Users',
+    //     //     icon: 'i-heroicons-user-group'
+    //     // },
+    //     // {
+    //     //     label: 'Medicines',
+    //     //     icon: 'i-heroicons-beaker',
+    //     //     to: '/app/administrator/medicines'
+    //     // },
+    //     // {
+    //     //     label: 'HMO',
+    //     //     icon: 'i-heroicons-circle-stack',
+    //     //     to: '/app/administrator/hmo'
+    //     // },
+    //     {
+    //         label: 'Settings',
+    //         icon: 'i-heroicons-cog-6-tooth'
+    //     }
+    // ]
 ]
 
 

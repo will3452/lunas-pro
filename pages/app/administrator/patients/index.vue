@@ -104,6 +104,7 @@ const recordView = async (record) => {
     </template>
     <CommonTable 
     :reload="state.refreshTable"
+    :paginationStatus="true"
     :tableName="'patients'"
     @recordView="recordView"
     @recordEdit="recordEdit"
